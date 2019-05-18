@@ -10,7 +10,11 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    lazy var game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
+    lazy var game = Concentration(numberOfPairsOfCards: numberOfPairsOfCards)
+    
+    var numberOfPairsOfCards: Int {
+        return (cardButtons.count + 1) / 2
+    }
     
     var flipCount = 0 {
         didSet {
@@ -27,7 +31,7 @@ class ViewController: UIViewController {
     
     @IBAction func touchCard(_ sender: UIButton) {
         flipCount += 1
-        if let cardNumber = cardButtons.index(of: sender) {
+        if let cardNumber = cardButtons.firstIndex(of: sender) {
             game.chooseCard(at: cardNumber)
             updateViewFromModel()
         } else {
@@ -50,11 +54,11 @@ class ViewController: UIViewController {
     }
     
     func emoji(for card: Card) -> String {
-        if emoji[card.identifier] == nil, emojiChoisces.count > 0 {
+        if emoji[card.id] == nil, emojiChoisces.count > 0 {
             let randomIndex = Int(arc4random_uniform(UInt32(emojiChoisces.count)))
-            emoji[card.identifier] = emojiChoisces.remove(at: randomIndex)
+            emoji[card.id] = emojiChoisces.remove(at: randomIndex)
         }
-        return emoji[card.identifier] ?? "?"
+        return emoji[card.id] ?? "?"
     }
 }
 
